@@ -1,0 +1,17 @@
+{
+    "name": "photomap",
+    "author": {
+        "name": "Christian Nunciato",
+        "email": "chris@nunciato.org",
+        "url": "https://chris.nunciato.org"
+    },
+    "devDependencies": {
+        "@types/node": "^10.0.0"
+    },
+    "dependencies": {
+        "@pulumi/aws": "^3.0.0",
+        "@pulumi/awsx": "^0.22.0",
+        "@pulumi/pulumi": "^2.0.0",
+        "exif-parser": "^0.1.12"
+    }
+}

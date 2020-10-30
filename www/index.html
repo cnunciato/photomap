@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Photos with Pulumi, Mapbox, and Leaflet</title>
+
+    <!--
+        This page uses the excellent library Leaflet.js to lay markers on a Mapbox map.
+        https://leafletjs.com/
+        https://docs.mapbox.com/
+    -->
+
+    <!-- Load the Leaflet CSS and JS bundles. -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script>
+
+        // Wait for the DOM to have been loaded before looking for the map element.
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            // Your Mapbox public token. You can get one of your own (after signing up) at
+            // https://account.mapbox.com/.
+            const mapboxPublicAPIKey = "your-mapbox-public-token";
+
+            // Initialize a new map with the ID of the element that should contain it.
+            const map = L.map("map");
+
+            // Center the map on your current location. Assumes the browser's GeoLocation
+            // prompt has been approved.
+            navigator.geolocation.getCurrentPosition(position => {
+                const { latitude, longitude } = position.coords;
+                map.setView([ latitude, longitude ], 13);
+            });
+
+            // Fetch all image records.
+            const markersResponse = await fetch("./markers");
+            const markers = await markersResponse.json();
+
+            // Add a clickable marker for each image record.
+            markers.forEach(marker => {
+                const { lat, long } = marker.image.gps;
+                const { url } = marker.image.s3;
+
+                L.marker([ lat, long ])
+                    .bindPopup(`<a href="${url}" target="_blank">
+                        <img src="${url}" width="200">
+                    </a>`)
+                    .addTo(map);
+            });
+
+            // Initialize the map. See the Mapbox and Leaflet documentation (quoted above)
+            // for help with these and other settings and styles.
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                maxZoom: 18,
+                id: "mapbox/satellite-v9",
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: mapboxPublicAPIKey,
+            })
+            .addTo(map);
+        });
+    </script>
+    <style>
+        #map {
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+</body>
+</html>
