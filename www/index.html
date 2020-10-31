@@ -29,7 +29,7 @@
                 map.setView([ latitude, longitude ], 13);
             });
 
-            // Fetch the settings for this app.
+            // Fetch the settings for this app, including the Mapbox public token.
             const settingsResponse = await fetch("./settings");
             const settings = await settingsResponse.json();
 
