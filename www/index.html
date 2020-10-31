@@ -19,10 +19,6 @@
         // Wait for the DOM to have been loaded before looking for the map element.
         document.addEventListener("DOMContentLoaded", async () => {
 
-            // Your Mapbox public token. You can get one of your own (after signing up) at
-            // https://account.mapbox.com/.
-            const mapboxPublicAPIKey = "your-mapbox-public-token";
-
             // Initialize a new map with the ID of the element that should contain it.
             const map = L.map("map");
 
@@ -32,6 +28,10 @@
                 const { latitude, longitude } = position.coords;
                 map.setView([ latitude, longitude ], 13);
             });
+
+            // Fetch the settings for this app.
+            const settingsResponse = await fetch("./settings");
+            const settings = await settingsResponse.json();
 
             // Fetch all image records.
             const markersResponse = await fetch("./markers");
@@ -56,7 +56,7 @@
                 id: "mapbox/satellite-v9",
                 tileSize: 512,
                 zoomOffset: -1,
-                accessToken: mapboxPublicAPIKey,
+                accessToken: settings.mapboxPublicToken,
             })
             .addTo(map);
         });

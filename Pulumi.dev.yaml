@@ -1,2 +1,3 @@
 config:
   aws:region: us-west-2
+  photomap:mapboxPublicToken: pk.eyJ1IjoiY251bmNpYXRvIiwiYSI6ImNrZ3dtNjhyNjA0ajEycXJoZ3NuOG9yaXMifQ.d8pFHnIv1ych5rAaf1MoyQ

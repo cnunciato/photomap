@@ -1,3 +1,11 @@
 name: photomap
 runtime: nodejs
 description: An example of using Pulumi, AWS and Mapbox to show photos on a map!
+template:
+    config:
+        aws:region:
+            description: The AWS region to deploy into.
+            default: us-west-2
+        mapboxPublicToken:
+            description: Your Mapbox public token, available at https://account.mapbox.com.
+            secret: false

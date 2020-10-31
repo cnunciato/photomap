@@ -7,6 +7,10 @@ import * as awsx from "@pulumi/awsx";
 // https://github.com/bwindels/exif-parser
 const parser = require("exif-parser");
 
+// Import the configured Mapbox token.
+const config = new pulumi.Config();
+const mapboxPublicToken = config.require("mapboxPublicToken");
+
 // Create an S3 bucket for receiving image uploads. When you upload images to this bucket,
 // make sure you set their `acl` properties as `public-read` as well, to make sure they're
 // accessible over the public web. For example, if you were uploading with the AWS CLI,
@@ -104,6 +108,18 @@ const api = new awsx.apigateway.API("api", {
         {
             path: "/",
             localPath: "www",
+        },
+
+        // The /settings endpoint returns settings for use on the client -- currently, just the configured Mapbox public token.
+        {
+            path: "/settings",
+            method: "GET",
+            eventHandler: async () => {
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify({ mapboxPublicToken }),
+                };
+            },
         },
 
         // The /markers endpoint returns a list of image metadata records, which we'll use
