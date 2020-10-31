@@ -22,7 +22,7 @@ const bucket = new aws.s3.Bucket("images", {
     // Make this bucket visible and accessible to the outside world.
     acl: aws.s3.CannedAcl.PublicRead,
 
-    // Destroy all objects in this bucket when the bucket itself is destroy.
+    // Destroy all objects in this bucket when the bucket itself is destroyed.
     forceDestroy: true,
 });
 
@@ -68,7 +68,7 @@ bucket.onObjectCreated("handler", async (event: aws.s3.BucketEvent) => {
         Key: objectKey,
     }).promise();
 
-    // Extract some EXIF data from the image.
+    // Extract all EXIF data from the image.
     // https://en.wikipedia.org/wiki/Exif
     const exif = parser.create(buffer.Body).parse();
 
@@ -97,13 +97,13 @@ bucket.onObjectCreated("handler", async (event: aws.s3.BucketEvent) => {
     }).promise();
 });
 
-// Create an AWS API Gateway instance to serve the website and API endpoint.
+// Create an AWS API Gateway instance to serve the website and API endpoints.
 // https://docs.aws.amazon.com/apigateway/
 const api = new awsx.apigateway.API("api", {
     routes: [
 
         // The root endpoint just serves up a web page. Pulumi will upload whatever
-        // content exists at the specified path by creating an S3 bucket and assigning the
+        // content exists at the specified path by creating an S3 bucket and applying the
         // proper access controls.
         {
             path: "/",
@@ -122,7 +122,7 @@ const api = new awsx.apigateway.API("api", {
             },
         },
 
-        // The /markers endpoint returns a list of image metadata records, which we'll use
+        // The /markers endpoint returns a list of image metadata records, which we use
         // to place markers on the map.
         {
             path: "/markers",
@@ -149,7 +149,7 @@ const api = new awsx.apigateway.API("api", {
 // Export the ID of the image bucket. You'll need this ID in order to upload your images.
 export const bucketID = bucket.id;
 
-// Export the name of the DynamoDB table. You don't need this, but it's helpful for
+// Export the name of the DynamoDB table. You don't necessarily need this, but it's helpful for
 // querying and debugging.
 export const tableName = table.name;
 
