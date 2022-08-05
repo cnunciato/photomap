@@ -14,7 +14,7 @@ An example of using [Pulumi](https://pulumi.com/), [AWS](https://aws.amazon.com)
 
 Create your own Photomap project below using this one as a template. Have your [Mapbox token](https://account.mapbox.com) ready, then click the Deploy button and follow the prompts.
 
-[![Deploy](https://get.pulumi.com/new/button.svg)](https://app.pulumi.com/new)
+[![Deploy](https://get.pulumi.com/new/button.svg)](https://app.pulumi.com/new?template=https://github.com/cnunciato/photomap/tree/master)
 
 ## How does it work?
 
